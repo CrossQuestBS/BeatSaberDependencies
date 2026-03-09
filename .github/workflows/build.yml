@@ -1,0 +1,60 @@
+name: Build Unity dependencies
+
+on:
+  push:
+      branches: "main"
+
+
+jobs:
+    build:
+        name: Build dependencies
+        env:
+          UNITY_VERSION: "6000.0.40f1"
+          BEAT_SABER_VERSION: "1.42.2"
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+                lfs: true
+            - uses: actions/cache@v5
+              with:
+                path: Library
+                key: Library-Android
+                restore-keys: Library-${{env.UNITY_VERSION}}
+            - name: Build Project
+              uses: game-ci/unity-builder@v4
+              with:
+                  unityVersion: ${{ env.UNITY_VERSION }}
+                  targetPlatform: "Android"
+                  buildsPath: build
+                  gitPrivateToken: ${{ secrets.GITHUB_TOKEN }}
+                  buildProfile: "Assets/Settings/Build Profiles/Compile.asset"
+              env:
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+            - name: Zip Dependencies
+              run: |
+                mkdir -p dependencies/PlayerScriptAssemblies
+                mkdir dependencies/Managed
+                cp Library/Bee/PlayerScriptAssemblies/*.dll ./dependencies/PlayerScriptAssemblies
+                cp Library/Bee/Android/Prj/IL2CPP/Il2CppBackup/Managed/*.dll ./dependencies/Managed
+                zip -r "dependencies-$UNITY_VERSION-$BEAT_SABER_VERSION).zip" ./dependencies
+            - name: PrepareJniLibs
+              run: |
+                mkdir JniLibs
+                cp -r Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/jniLibs/arm64-v8a JniLibs
+                zip -r "jni-$UNITY_VERSION-$BEAT_SABER_VERSION".zip" ./JniLibs
+            - uses: actions/upload-artifact@v7
+              with:
+                archive: false
+                name: dependencies
+                path: dependencies-${{env.UNITY_VERSION}}-${{env.BEAT_SABER_VERSION}}.zip
+            - uses: actions/upload-artifact@v7
+              with:
+                archive: false
+                name: jni
+                path: jni-${{env.UNITY_VERSION}}-${{env.BEAT_SABER_VERSION}}.zip
+                    
