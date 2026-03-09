@@ -46,7 +46,7 @@ jobs:
               run: |
                 mkdir JniLibs
                 cp -r Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/jniLibs/arm64-v8a JniLibs
-                zip -r "jni-$UNITY_VERSION-$BEAT_SABER_VERSION".zip" ./JniLibs
+                zip -r "jni-$UNITY_VERSION-$BEAT_SABER_VERSION.zip" ./JniLibs
             - uses: actions/upload-artifact@v7
               with:
                 archive: false
