@@ -41,7 +41,7 @@ jobs:
                 mkdir dependencies/Managed
                 cp Library/Bee/PlayerScriptAssemblies/*.dll ./dependencies/PlayerScriptAssemblies
                 cp Library/Bee/Android/Prj/IL2CPP/Il2CppBackup/Managed/*.dll ./dependencies/Managed
-                zip -r "dependencies-$UNITY_VERSION-$BEAT_SABER_VERSION).zip" ./dependencies
+                zip -r "dependencies-$UNITY_VERSION-$BEAT_SABER_VERSION.zip" ./dependencies
             - name: PrepareJniLibs
               run: |
                 mkdir JniLibs
