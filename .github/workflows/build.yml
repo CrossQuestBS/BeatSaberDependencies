@@ -41,20 +41,20 @@ jobs:
                 mkdir dependencies/Managed
                 cp Library/Bee/PlayerScriptAssemblies/*.dll ./dependencies/PlayerScriptAssemblies
                 cp Library/Bee/Android/Prj/IL2CPP/Il2CppBackup/Managed/*.dll ./dependencies/Managed
-                zip -r "dependencies-$UNITY_VERSION-$BEAT_SABER_VERSION.zip" ./dependencies
+                tar cvf - dependencies | gzip -9 - > dependencies-beatsaber.tar.gz
             - name: PrepareJniLibs
               run: |
                 mkdir JniLibs
                 cp -r Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/jniLibs/arm64-v8a JniLibs
-                zip -r "jni-$UNITY_VERSION-$BEAT_SABER_VERSION.zip" ./JniLibs
+                tar cvf - JniLibs | gzip -9 - > jni-beatsaber.tar.gz
             - uses: actions/upload-artifact@v7
               with:
                 archive: false
                 name: dependencies
-                path: dependencies-${{env.UNITY_VERSION}}-${{env.BEAT_SABER_VERSION}}.zip
+                path: dependencies-beatsaber.tar.gz
             - uses: actions/upload-artifact@v7
               with:
                 archive: false
                 name: jni
-                path: jni-${{env.UNITY_VERSION}}-${{env.BEAT_SABER_VERSION}}.zip
+                path: jni-beatsaber.tar.gz
                     
