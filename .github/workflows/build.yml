@@ -23,6 +23,9 @@ jobs:
                 path: Library
                 key: Library-Android
                 restore-keys: Library-${{env.UNITY_VERSION}}
+            - name: "Move LibraryFiles"
+              run: |
+                cp -f LibraryFiles/EditorOnlyScriptingSettings.json Library/EditorOnlyScriptingSettings.json
             - name: Build Project
               uses: game-ci/unity-builder@v4
               with:
