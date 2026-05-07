@@ -25,6 +25,7 @@ jobs:
                 restore-keys: Library-${{env.UNITY_VERSION}}
             - name: "Move LibraryFiles"
               run: |
+                mkdir Library
                 cp -f LibraryFiles/EditorOnlyScriptingSettings.json Library/EditorOnlyScriptingSettings.json
             - name: Build Project
               uses: game-ci/unity-builder@v4
